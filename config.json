@@ -1,0 +1,14 @@
+{
+    "name": "CPOR",
+    "settings": {
+        "proxyType": "http",
+        "host": "0.0.0.0",
+        "port": 5432,
+        "username": "user",
+        "password": "password",
+        "noProxy": [
+            "localhost",
+            "127.0.0.1"
+        ]
+    }
+}

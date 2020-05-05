@@ -1,0 +1,26 @@
+[general]
+name=ProxySetter
+qgisMinimumVersion=3.0
+qgisMaximumVersion=3.99
+description= DSG
+version=0.0
+author=Eliton Filho
+email=eliton.filho@eb.mil.br
+
+# Optional items:
+
+# Uncomment the following line and add your changelog entries:
+changelog=several bug fixes
+
+# tags are comma separated with spaces allowed
+tags=proxy
+
+homepage=https://github.com/elitonfilho/proxySetter
+tracker=https://github.com/elitonfilho/proxySetter/issues
+repository=https://github.com/elitonfilho/deleteFeatures
+icon=icon.png
+# experimental flag
+experimental=True
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False

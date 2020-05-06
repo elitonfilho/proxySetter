@@ -1,6 +1,6 @@
 {
     "Proxy1": {
-        "name": "CPOR",
+        "name": "Proxy1",
         "proxyType": "http",
         "host": "0.0.0.0",
         "port": 5432,
@@ -12,7 +12,7 @@
         ]
     },
     "Proxy2": {
-        "name": "CTA",
+        "name": "Proxy2",
         "proxyType": "http",
         "host": "0.0.0.0",
         "port": 5432,

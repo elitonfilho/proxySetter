@@ -7,6 +7,7 @@ from qgis.PyQt.QtGui import *
 from qgis.PyQt.QtWidgets import *
 from qgis.gui import *
 from qgis.core import *
+from PyQt5.QtNetwork import QNetworkProxy, QNetworkProxyFactory
 from proxySetter import resources
 
 
@@ -22,12 +23,16 @@ class ProxySetter:
         '''Start configurations'''
         self.initActions()
         self.initSignals()
+        QNetworkProxy()
 
     def initActions(self):
         self.coordinates = []
-        self.toolbar = self.iface.addToolBar(u"Proxy settings")
-        self.comboBox = QComboBox(self.toolbar)
-        (print(data) for data in self.config)
+        # self.toolbar = self.iface.addToolBar(u"Proxy settings")
+        self.comboBox = QComboBox()
+        self.iface.addToolBarWidget(self.comboBox)
+        self.comboBox.addItems([option for option in self.config])
+
+        self.comboBox.activated[str].connect(self.modifyProxy)
 
         # iconPath = ':/plugins/proxySetter/proxy.png'
         # self.actionCBox = QAction(QIcon(iconPath), u"Setting proxy", self.iface.mainWindow())
@@ -44,3 +49,7 @@ class ProxySetter:
     def unload(self):
         pass
 
+    def modifyProxy(self, text):
+        #After setting the proxy it could be necessary to update active connection. See QGSAuthMethod / QgsAuthManager
+        # See QNetworkProxy from pyqt
+        print(text)

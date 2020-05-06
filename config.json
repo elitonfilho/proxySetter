@@ -1,6 +1,18 @@
 {
-    "name": "CPOR",
-    "settings": {
+    "Proxy1": {
+        "name": "CPOR",
+        "proxyType": "http",
+        "host": "0.0.0.0",
+        "port": 5432,
+        "username": "user",
+        "password": "password",
+        "noProxy": [
+            "localhost",
+            "127.0.0.1"
+        ]
+    },
+    "Proxy2": {
+        "name": "CTA",
         "proxyType": "http",
         "host": "0.0.0.0",
         "port": 5432,

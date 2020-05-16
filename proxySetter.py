@@ -10,6 +10,7 @@ from qgis.gui import *
 from qgis.core import *
 from PyQt5.QtNetwork import QNetworkProxy, QNetworkProxyFactory, QNetworkAccessManager
 from proxySetter import resources
+from proxySetter.proxyFactory import ProxyFactory
 
 
 class ProxySetter:
@@ -61,6 +62,10 @@ class ProxySetter:
         # See QNetworkProxy from pyqt
         # TODO: create a ProxyFactory instead
         self.proxy = self.getProxy(self.config[text])
-        self.networkManager.setFallbackProxyAndExcludes(self.proxy, excludes=self.config[text]['noProxy'], noProxyURLs=self.config[text]['noProxy'])
+        self.proxyFactory = ProxyFactory(self.config[text])
+        for item in self.networkManager.proxyFactories():
+            self.networkManager.removeProxyFactory(item)
+        self.networkManager.insertProxyFactory(self.proxyFactory)
+        self.networkManager.setProxyFactory(self.proxyFactory)
+        # self.networkManager.setFallbackProxyAndExcludes(self.proxy, excludes=self.config[text]['noProxy'], noProxyURLs=self.config[text]['noProxy'])
         # self.networkManager.setProxy(self.proxy)
-        # print(self.networkManager.fallbackProxy())

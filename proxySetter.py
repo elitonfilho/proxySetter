@@ -2,6 +2,7 @@
 
 import os
 import json
+import operator
 from pathlib import Path
 from qgis.PyQt.QtCore import *
 from qgis.PyQt.QtGui import *
@@ -18,6 +19,7 @@ class ProxySetter:
     def __init__(self, iface):
         self.iface = iface
         self.networkManager = QgsNetworkAccessManager.instance()
+        self.s = QSettings()
         jsonPath = Path(__file__).parent.resolve()
         with open(Path(jsonPath, 'config.json'), 'r', encoding='utf-8') as jsonFile:
             self.config = json.load(jsonFile)
@@ -34,6 +36,7 @@ class ProxySetter:
         self.comboBox.addItems([option for option in self.config])
 
         self.comboBox.activated[str].connect(self.modifyProxy)
+        self.comboBox.activated[str].connect(self.updateSettings)
 
         # iconPath = ':/plugins/proxySetter/proxy.png'
         # self.actionCBox = QAction(QIcon(iconPath), u"Setting proxy", self.iface.mainWindow())
@@ -51,21 +54,30 @@ class ProxySetter:
         return QNetworkProxy(QNetworkProxy.HttpProxy,
                              hostName=option['host'],
                              port=option['port'],
-                             user=option['username'],
+                             user=option['user'],
                              password=option['password'])
+
+    def updateSettings(self, text):
+        self.s.setValue('proxy/proxyEnabled', 'true')
+        self.s.setValue('proxy/proxyHost', self.config[text]['host'])
+        self.s.setValue('proxy/proxyPort', self.config[text]['port'])
+        self.s.setValue('proxy/proxyUser', self.config[text]['user'])
+        self.s.setValue('proxy/proxyPassword', self.config[text]['password'])
+        self.s.setValue('proxy/proxyType', self.config[text]['proxyType'])
+        # self.s.setValue('proxy/noProxyUrls', )
+        self.s.sync()
 
     def unload(self):
         pass
 
     def modifyProxy(self, text):
         # After setting the proxy it could be necessary to update active connection. See QGSAuthMethod / QgsAuthManager
-        # See QNetworkProxy from pyqt
-        # TODO: create a ProxyFactory instead
         self.proxy = self.getProxy(self.config[text])
         self.proxyFactory = ProxyFactory(self.config[text])
-        for item in self.networkManager.proxyFactories():
-            self.networkManager.removeProxyFactory(item)
-        self.networkManager.insertProxyFactory(self.proxyFactory)
-        self.networkManager.setProxyFactory(self.proxyFactory)
-        # self.networkManager.setFallbackProxyAndExcludes(self.proxy, excludes=self.config[text]['noProxy'], noProxyURLs=self.config[text]['noProxy'])
+        # for item in self.networkManager.proxyFactories():
+        #     self.networkManager.removeProxyFactory(item)
+        # self.networkManager.insertProxyFactory(self.proxyFactory)
+        # self.networkManager.setProxyFactory(self.proxyFactory)
+        QNetworkProxy.setApplicationProxy(self.proxy)
+        self.networkManager.setFallbackProxyAndExcludes(self.proxy, [], []) # excludes=self.config[text]['noProxy'], noProxyURLs=self.config[text]['noProxy']
         # self.networkManager.setProxy(self.proxy)

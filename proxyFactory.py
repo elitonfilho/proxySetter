@@ -10,6 +10,6 @@ class ProxyFactory(QNetworkProxyFactory):
         return [QNetworkProxy(QNetworkProxy.HttpProxy,
                              hostName=self.config['host'],
                              port=self.config['port'],
-                             user=self.config['username'],
+                             user=self.config['user'],
                              password=self.config['password'])]
 

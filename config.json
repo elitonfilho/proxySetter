@@ -1,10 +1,10 @@
 {
     "Proxy1": {
         "name": "Proxy1",
-        "proxyType": "http",
+        "proxyType": "HttpProxy",
         "host": "0.0.0.0",
         "port": 5432,
-        "username": "user",
+        "user": "user",
         "password": "password",
         "noProxy": [
             "localhost",
@@ -13,11 +13,11 @@
     },
     "Proxy2": {
         "name": "Proxy2",
-        "proxyType": "http",
-        "host": "0.0.0.0",
-        "port": 5432,
-        "username": "user",
-        "password": "password",
+        "proxyType": "HttpProxy",
+        "host": "10.25.160.10",
+        "port": 2000,
+        "user": "1cgeo-eliton",
+        "password": "2ruFrese",
         "noProxy": [
             "localhost",
             "127.0.0.1"

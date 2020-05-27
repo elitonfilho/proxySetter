@@ -1,26 +1,25 @@
 {
     "Proxy1": {
-        "name": "Proxy1",
+        "name": "Proxy CTA",
         "proxyType": "HttpProxy",
         "host": "0.0.0.0",
         "port": 5432,
         "user": "user",
         "password": "password",
-        "noProxy": [
-            "localhost",
-            "127.0.0.1"
-        ]
+        "noProxy": []
     },
     "Proxy2": {
-        "name": "Proxy2",
+        "name": "Proxy CPOR",
         "proxyType": "HttpProxy",
         "host": "10.25.160.10",
         "port": 2000,
-        "user": "1cgeo-eliton",
-        "password": "2ruFrese",
+        "user": "cgeo",
+        "password": "dgeo1cgeo",
         "noProxy": [
             "localhost",
-            "127.0.0.1"
+            "127.0.0.1",
+            "http://10.25.163.10",
+            "10.25.163.10"
         ]
     }
 }

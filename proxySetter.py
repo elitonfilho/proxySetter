@@ -76,5 +76,5 @@ class ProxySetter:
         # self.networkManager.insertProxyFactory(self.proxyFactory)
         # self.networkManager.setProxyFactory(self.proxyFactory)
         QNetworkProxy.setApplicationProxy(self.proxy)
-        self.networkManager.setFallbackProxyAndExcludes(self.proxy, [], self.config[text]['noProxy']) # excludes=self.config[text]['noProxy'], noProxyURLs=self.config[text]['noProxy']
+        self.networkManager.setFallbackProxyAndExcludes(self.proxy, []) # excludes=self.config[text]['noProxy'], noProxyURLs=self.config[text]['noProxy']
         # self.networkManager.setProxy(self.proxy)

@@ -56,14 +56,14 @@ class ProxySetter:
                              hostName=option['host'],
                              port=option['port'],
                              user=option['user'],
-                             password=option['password'])
+                             password=self.getPassword(option))
 
     def updateSettings(self, text):
         self.s.setValue('proxy/proxyEnabled', 'true')
         self.s.setValue('proxy/proxyHost', self.config[text]['host'])
         self.s.setValue('proxy/proxyPort', self.config[text]['port'])
         self.s.setValue('proxy/proxyUser', self.config[text]['user'])
-        self.s.setValue('proxy/proxyPassword', self.config[text]['password'])
+        self.s.setValue('proxy/proxyPassword', self.getPassword(self.config[text]))
         self.s.setValue('proxy/proxyType', self.config[text]['proxyType'])
         self.s.setValue('proxy/noProxyUrls', self.config[text]['noProxy'])
         self.s.sync()
@@ -74,12 +74,14 @@ class ProxySetter:
     def modifyProxy(self, text):
         # After setting the proxy it could be necessary to update active connection. See QGSAuthMethod / QgsAuthManager
         self.proxy = self.getProxy(self.config[text])
-        print(self.getPassword(self.config[text]))
-        # self.proxyFactory = ProxyFactory(self.config[text])
-        # for item in self.networkManager.proxyFactories():
-        #     self.networkManager.removeProxyFactory(item)
-        # self.networkManager.insertProxyFactory(self.proxyFactory)
-        # self.networkManager.setProxyFactory(self.proxyFactory)
         QNetworkProxy.setApplicationProxy(self.proxy)
         self.networkManager.setFallbackProxyAndExcludes(self.proxy, [], self.config[text]['noProxy']) # excludes=self.config[text]['noProxy'], noProxyURLs=self.config[text]['noProxy']
         # self.networkManager.setProxy(self.proxy)
+        '''
+        Option for proxyFactory:
+        self.proxyFactory = ProxyFactory(self.config[text])
+        for item in self.networkManager.proxyFactories():
+            self.networkManager.removeProxyFactory(item)
+        self.networkManager.insertProxyFactory(self.proxyFactory)
+        self.networkManager.setProxyFactory(self.proxyFactory)
+        '''

@@ -2,11 +2,16 @@
     "Proxy CTA": {
         "name": "Proxy CTA",
         "proxyType": "HttpProxy",
-        "host": "0.0.0.0",
-        "port": 5432,
+        "host": "10.25.108.51",
+        "port": 2000,
         "user": "1cgeo-eliton",
         "password": "MnJ1RnJlc2U=",
-        "noProxy": []
+        "noProxy": [
+            "localhost",
+            "127.0.0.1",
+            "http://10.25.163.10",
+            "10.25.163.10"
+        ]
     },
     "Proxy CPOR": {
         "name": "Proxy CPOR",

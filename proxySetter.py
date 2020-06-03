@@ -2,7 +2,7 @@
 
 import os
 import json
-import operator
+import base64
 from pathlib import Path
 from qgis.PyQt.QtWidgets import QComboBox
 from qgis.PyQt.QtNetwork import QNetworkProxy, QNetworkProxyFactory
@@ -47,6 +47,10 @@ class ProxySetter:
     def initSignals(self):
         pass
 
+    def getPassword(self, text):
+        temp = base64.b64decode(bytes(text['password'], 'utf-8'))
+        return temp.decode('utf-8')
+
     def getProxy(self, option):
         return QNetworkProxy(QNetworkProxy.HttpProxy,
                              hostName=option['host'],
@@ -70,6 +74,7 @@ class ProxySetter:
     def modifyProxy(self, text):
         # After setting the proxy it could be necessary to update active connection. See QGSAuthMethod / QgsAuthManager
         self.proxy = self.getProxy(self.config[text])
+        print(self.getPassword(self.config[text]))
         # self.proxyFactory = ProxyFactory(self.config[text])
         # for item in self.networkManager.proxyFactories():
         #     self.networkManager.removeProxyFactory(item)

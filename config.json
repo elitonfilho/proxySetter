@@ -1,5 +1,5 @@
 {
-    "Proxy1": {
+    "Proxy CTA": {
         "name": "Proxy CTA",
         "proxyType": "HttpProxy",
         "host": "0.0.0.0",
@@ -8,7 +8,7 @@
         "password": "password",
         "noProxy": []
     },
-    "Proxy2": {
+    "Proxy CPOR": {
         "name": "Proxy CPOR",
         "proxyType": "HttpProxy",
         "host": "10.25.160.10",

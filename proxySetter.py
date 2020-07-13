@@ -9,6 +9,7 @@ from qgis.PyQt.QtNetwork import QNetworkProxy, QNetworkProxyFactory
 from qgis.core import QgsSettings, QgsNetworkAccessManager
 from proxySetter import resources
 from proxySetter.proxyFactory import ProxyFactory
+from proxySetter.widget import Widget
 
 
 class ProxySetter:
@@ -32,8 +33,8 @@ class ProxySetter:
         self.iface.addToolBarWidget(self.comboBox)
         self.comboBox.addItems([option for option in self.config])
 
-        self.comboBox.activated[str].connect(self.modifyProxy)
-        self.comboBox.activated[str].connect(self.updateSettings)
+        self.comboBox.activated[str].connect(self.handler)
+        # self.comboBox.activated[str].connect(self.modifyProxy)
 
         # iconPath = ':/plugins/proxySetter/proxy.png'
         # self.actionCBox = QAction(QIcon(iconPath), u"Setting proxy", self.iface.mainWindow())
@@ -47,7 +48,7 @@ class ProxySetter:
     def initSignals(self):
         pass
 
-    def getPassword(self, text):
+    def getPasswordB64(self, text):
         temp = base64.b64decode(bytes(text['password'], 'utf-8'))
         return temp.decode('utf-8')
 
@@ -56,17 +57,37 @@ class ProxySetter:
                              hostName=option['host'],
                              port=option['port'],
                              user=option['user'],
-                             password=self.getPassword(option))
+                             password=self.getPasswordB64(option))
+
+    def handler(self, text):
+        print(self.config[text])
+        if not (self.config[text]['user'] or self.config[text]['password']):
+            self.widget = Widget(text)
+            self.widget.triggerUpdate[str].connect(self.updateUnknown)
+        else:
+            self.updateSettings(text)
+            self.modifyProxy(text)
 
     def updateSettings(self, text):
         self.s.setValue('proxy/proxyEnabled', 'true')
         self.s.setValue('proxy/proxyHost', self.config[text]['host'])
         self.s.setValue('proxy/proxyPort', self.config[text]['port'])
         self.s.setValue('proxy/proxyUser', self.config[text]['user'])
-        self.s.setValue('proxy/proxyPassword', self.getPassword(self.config[text]))
+        self.s.setValue('proxy/proxyPassword',
+                        self.getPasswordB64(self.config[text]))
         self.s.setValue('proxy/proxyType', self.config[text]['proxyType'])
         self.s.setValue('proxy/noProxyUrls', self.config[text]['noProxy'])
         self.s.sync()
+
+    def updateUnknown(self, text):
+        print('oui!!!')
+        _username = base64.b64encode(
+            bytes(self.widget.username.text(), 'utf-8')).decode('utf-8')
+        _password = base64.b64encode(
+            bytes(self.widget.password.text(), 'utf-8')).decode('utf-8')
+        self.config[text]['user'] = _username
+        self.config[text]['password'] = _password
+        self.handler(text)
 
     def unload(self):
         pass
@@ -75,7 +96,9 @@ class ProxySetter:
         # After setting the proxy it could be necessary to update active connection. See QGSAuthMethod / QgsAuthManager
         self.proxy = self.getProxy(self.config[text])
         QNetworkProxy.setApplicationProxy(self.proxy)
-        self.networkManager.setFallbackProxyAndExcludes(self.proxy, [], self.config[text]['noProxy']) # excludes=self.config[text]['noProxy'], noProxyURLs=self.config[text]['noProxy']
+        # excludes=self.config[text]['noProxy'], noProxyURLs=self.config[text]['noProxy']
+        self.networkManager.setFallbackProxyAndExcludes(
+            self.proxy, [], self.config[text]['noProxy'])
         # self.networkManager.setProxy(self.proxy)
         '''
         Option for proxyFactory:

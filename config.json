@@ -4,8 +4,8 @@
         "proxyType": "HttpProxy",
         "host": "10.25.108.51",
         "port": 2000,
-        "user": "1cgeo-eliton",
-        "password": "MnJ1RnJlc2U=",
+        "user": "",
+        "password": "",
         "noProxy": [
             "localhost",
             "127.0.0.1",

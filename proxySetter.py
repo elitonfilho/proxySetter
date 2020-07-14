@@ -18,8 +18,8 @@ class ProxySetter:
         self.iface = iface
         self.networkManager = QgsNetworkAccessManager.instance()
         self.s = QgsSettings()
-        jsonPath = Path(__file__).parent.resolve()
-        with open(Path(jsonPath, 'config.json'), 'r', encoding='utf-8') as jsonFile:
+        self.jsonPath = Path(__file__).parent.resolve() / 'config.json'
+        with open(self.jsonPath, 'r', encoding='utf-8') as jsonFile:
             self.config = json.load(jsonFile)
 
     def initGui(self):
@@ -81,13 +81,12 @@ class ProxySetter:
 
     def updateUnknown(self, text):
         print('oui!!!')
-        _username = base64.b64encode(
-            bytes(self.widget.username.text(), 'utf-8')).decode('utf-8')
-        _password = base64.b64encode(
+        self.config[text]['user'] = self.widget.password.text()
+        self.config[text]['password'] = base64.b64encode(
             bytes(self.widget.password.text(), 'utf-8')).decode('utf-8')
-        self.config[text]['user'] = _username
-        self.config[text]['password'] = _password
         self.handler(text)
+        with open(self.jsonPath, 'w') as f:
+            json.dump(self.config, f)
 
     def unload(self):
         pass
